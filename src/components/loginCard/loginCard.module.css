@@ -1,0 +1,11 @@
+.card {
+    background-color: #ffff;
+    padding: 20px;
+    border-radius: 25px;
+    text-align: center;
+  }
+
+  .title{
+    text-align: center;
+    padding-bottom: 20px;
+  }
