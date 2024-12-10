@@ -14,6 +14,8 @@ export default function CadastroPage() {
         password:'',
     })
 
+    const [error,setError] = useState('')
+
     const handleFormEdit = (event, name) => {
         setFormData({
             ...formData,
@@ -28,21 +30,22 @@ export default function CadastroPage() {
                 method: 'POST',
                 body: JSON.stringify(formData)
             })
-            const json = await response.json()
-            console.log(response.status)
-            console.log(json)
-        }catch(err){
 
+            const json = await response.json()
+            if(response.status !== 201 ) throw new Error (json)
+        }catch(err){
+            setError(err.message)
         }
     }
     return (
         <div className={styles.background}>
             <LoginCard title='Cadastro'>
                 <form className={styles.form}> 
-                    <Input type='text' placeholder='Nome' required value={formData.name} onChange ={(e) => {handleFormEdit(e, 'name')}} />
-                    <Input type="email" placeholder="E-mail" required value={formData.email} onChange ={(e) => {handleFormEdit(e, 'email')}} />
-                    <Input type="password" placeholder="Senha" required value={formData.password} onChange ={(e) => {handleFormEdit(e, 'password')}} />
+                    <Input type='text' id="username" name="username" placeholder='Nome' required value={formData.name} onChange ={(e) => {handleFormEdit(e, 'name')}} />
+                    <Input type="email" id="email" name="email" placeholder="E-mail" required value={formData.email} onChange ={(e) => {handleFormEdit(e, 'email')}} />
+                    <Input type="password" id="password" name="password" placeholder="Senha" required value={formData.password} onChange ={(e) => {handleFormEdit(e, 'password')}} />
                     <Button>Criar Conta</Button>
+                    {error && <p>{error}</p>}
                     <Link href="/login">Já possuo conta</Link>
                 </form>
             </LoginCard>
