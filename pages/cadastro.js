@@ -1,4 +1,6 @@
-import {useState} from 'react'
+import {use, useState} from 'react'
+import { setCookie } from 'cookies-next'
+import { useRouter } from 'next/router'
 
 import Link from 'next/link'
 import styles from '../styles/login.module.css';
@@ -15,6 +17,7 @@ export default function CadastroPage() {
     })
 
     const [error,setError] = useState('')
+    const router = useRouter()
 
     const handleFormEdit = (event, name) => {
         setFormData({
@@ -33,6 +36,10 @@ export default function CadastroPage() {
 
             const json = await response.json()
             if(response.status !== 201 ) throw new Error (json)
+
+            setCookie('authorization', json)
+            router.push('/')
+            
         }catch(err){
             setError(err.message)
         }
@@ -41,9 +48,9 @@ export default function CadastroPage() {
         <div className={styles.background}>
             <LoginCard title='Cadastro'>
                 <form className={styles.form}> 
-                    <Input type='text' id="username" name="username" placeholder='Nome' required value={formData.name} onChange ={(e) => {handleFormEdit(e, 'name')}} />
-                    <Input type="email" id="email" name="email" placeholder="E-mail" required value={formData.email} onChange ={(e) => {handleFormEdit(e, 'email')}} />
-                    <Input type="password" id="password" name="password" placeholder="Senha" required value={formData.password} onChange ={(e) => {handleFormEdit(e, 'password')}} />
+                    <Input type='text' placeholder='Nome' required value={formData.name} onChange ={(e) => {handleFormEdit(e, 'name')}} />
+                    <Input type="email"  placeholder="E-mail" required value={formData.email} onChange ={(e) => {handleFormEdit(e, 'email')}} />
+                    <Input type="password"  placeholder="Senha" required value={formData.password} onChange ={(e) => {handleFormEdit(e, 'password')}} />
                     <Button>Criar Conta</Button>
                     {error && <p>{error}</p>}
                     <Link href="/login">Já possuo conta</Link>
