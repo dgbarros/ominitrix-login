@@ -21,16 +21,25 @@ export default function CadastroPage() {
         })
     }
 
-    const handleForm = (event) => {
-        event.preventDefault()
-        console.log(formData)
+    const handleForm = async (event) => {
+        try{
+            event.preventDefault()
+            const response = await fetch('/api/user/cadastro', {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            })
+            const json = await response.json()
+            console.log(response.status)
+            console.log(json)
+        }catch(err){
+
+        }
     }
     return (
         <div className={styles.background}>
             <LoginCard title='Cadastro'>
                 <form className={styles.form}> 
                     <Input type='text' placeholder='Nome' required value={formData.name} onChange ={(e) => {handleFormEdit(e, 'name')}} />
-                    <Input type='text' placeholder='Sobrenome' required/>
                     <Input type="email" placeholder="E-mail" required value={formData.email} onChange ={(e) => {handleFormEdit(e, 'email')}} />
                     <Input type="password" placeholder="Senha" required value={formData.password} onChange ={(e) => {handleFormEdit(e, 'password')}} />
                     <Button>Criar Conta</Button>
